@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uIPO — University Innovation Portfolio Offerings</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --dark: #2a2a2a;
+            --gray: #555555;
+            --mid: #777777;
+            --light: #aaaaaa;
+            --border: #e0e0e0;
+            --bg: #ffffff;
+            --off-white: #f8f9fa;
+            --blue: #2b5a8c;
+            --blue-light: #3b6ea5;
+            --blue-bg: rgba(43, 90, 140, 0.06);
+            --blue-border: rgba(43, 90, 140, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg);
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 1100px; margin: 0 auto; padding: 0 2rem;
+            display: flex; align-items: center; justify-content: flex-end; height: 56px;
+        }
+        .nav-links { display: flex; gap: 0.25rem; }
+        .nav-links a {
+            color: var(--gray); text-decoration: none; font-size: 0.85rem;
+            font-weight: 500; padding: 0.5rem 1rem; border-radius: 6px; transition: all 0.2s ease;
+        }
+        .nav-links a:hover { color: var(--black); background: var(--off-white); }
+
+        .hero {
+            padding: 9rem 2rem 2.5rem; max-width: 1100px; margin: 0 auto;
+            animation: fadeUp 0.8s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-tag {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; font-weight: 500;
+            color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.6rem);
+            color: var(--black); line-height: 1.15; max-width: 700px; margin-bottom: 1.5rem;
+        }
+        .hero-sub {
+            font-size: 1.15rem; font-weight: 300; color: var(--gray);
+            max-width: 560px; line-height: 1.7;
+        }
+
+        .stats-bar { max-width: 1100px; margin: 0 auto 2.5rem; padding: 0 2rem; animation: fadeUp 0.8s ease 0.15s both; }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+            background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+        }
+        .stat { background: var(--bg); padding: 2rem 1.5rem; text-align: center; }
+        .stat-value { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--black); margin-bottom: 0.3rem; }
+        .stat-label { font-size: 0.75rem; font-weight: 400; color: var(--mid); line-height: 1.4; }
+
+        .section { max-width: 1100px; margin: 0 auto; padding: 0 2rem 3rem; }
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500;
+            color: var(--blue); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1.25rem;
+        }
+        .section h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--black); margin-bottom: 1.5rem; }
+        .section p { color: var(--dark); font-weight: 300; font-size: 0.95rem; line-height: 1.8; max-width: 680px; }
+
+        .thesis-line {
+            font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--blue);
+            font-style: italic; margin: 1.75rem 0; padding-left: 1.5rem;
+            border-left: 2px solid var(--blue); line-height: 1.5;
+        }
+
+        .model-steps { display: flex; flex-direction: column; margin: 1.5rem 0 2rem; }
+        .model-step {
+            display: flex; align-items: flex-start; gap: 1rem;
+            padding: 1rem 0; border-bottom: 1px solid var(--border);
+        }
+        .model-step:last-child { border-bottom: none; }
+        .step-num {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500;
+            color: var(--blue); background: var(--blue-bg); min-width: 28px; height: 28px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 0.1rem;
+        }
+        .step-text { font-size: 0.9rem; font-weight: 400; color: var(--dark); line-height: 1.6; }
+        .step-text strong { color: var(--black); font-weight: 600; }
+
+        .portfolio-line {
+            font-size: 1rem; font-weight: 500; color: var(--black); background: var(--off-white);
+            border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 1rem;
+        }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .card { background: var(--off-white); border: 1px solid var(--border); border-radius: 10px; padding: 2rem; }
+        .card h3 {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500;
+            color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .card p { font-size: 0.88rem; font-weight: 300; color: var(--dark); line-height: 1.75; }
+
+        .why-status { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .why-now-card {
+            background: var(--blue-bg); border: 1px solid var(--blue-border);
+            border-radius: 10px; padding: 2rem;
+        }
+        .why-now-card h3 {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500;
+            color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .why-now-card p { font-size: 0.88rem; font-weight: 300; color: var(--dark); line-height: 1.75; }
+
+        .status-card { background: var(--off-white); border: 1px solid var(--border); border-radius: 10px; padding: 2rem; }
+        .status-card h3 {
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500;
+            color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .status-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+        .status-list li {
+            font-size: 0.88rem; font-weight: 300; color: var(--dark); line-height: 1.6;
+            padding-left: 1.2rem; position: relative;
+        }
+        .status-list li::before {
+            content: ''; position: absolute; left: 0; top: 0.55rem;
+            width: 5px; height: 5px; border-radius: 50%; background: var(--blue);
+        }
+
+        .divider { max-width: 1100px; margin: 0 auto 2.5rem; padding: 0 2rem; }
+        .divider-line { height: 1px; background: var(--border); }
+
+        .connect-section { max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .connect-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem; }
+        .connect-card {
+            display: flex; align-items: center; gap: 1.25rem; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem 1.75rem;
+            text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+        }
+        .connect-card:hover {
+            background: var(--off-white); border-color: var(--light);
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .connect-icon {
+            width: 44px; height: 44px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .connect-icon svg { width: 20px; height: 20px; }
+        .icon-research { background: var(--blue-bg); }
+        .icon-research svg { color: var(--blue); }
+        .icon-investor { background: rgba(42,42,42,0.06); }
+        .icon-investor svg { color: var(--dark); }
+        .icon-substack { background: rgba(255,107,53,0.08); }
+        .icon-substack svg { color: #e05a2b; }
+        .icon-email { background: var(--blue-bg); }
+        .icon-email svg { color: var(--blue); }
+        .connect-info h4 { font-size: 0.9rem; font-weight: 600; color: var(--black); margin-bottom: 0.2rem; }
+        .connect-info p { font-size: 0.78rem; font-weight: 400; color: var(--mid); line-height: 1.4; }
+        .connect-arrow {
+            margin-left: auto; color: var(--light); opacity: 0;
+            transition: all 0.25s ease; flex-shrink: 0;
+        }
+        .connect-card:hover .connect-arrow { opacity: 1; transform: translateX(3px); }
+
+        .sources { max-width: 1100px; margin: 0 auto; padding: 0 2rem 2rem; }
+        .sources p { font-size: 0.65rem; color: var(--light); line-height: 1.6; }
+
+        footer { border-top: 1px solid var(--border); padding: 2rem; }
+        .footer-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .footer-text { font-size: 0.75rem; color: var(--mid); }
+        .footer-contact { font-size: 0.75rem; color: var(--gray); }
+        .footer-contact a { color: var(--gray); text-decoration: none; transition: color 0.2s; }
+        .footer-contact a:hover { color: var(--black); }
+
+        .mobile-menu-btn {
+            display: none; background: none; border: none; cursor: pointer;
+            padding: 0.5rem; color: var(--gray);
+        }
+        .mobile-menu-btn svg { width: 22px; height: 22px; }
+
+        @media (max-width: 768px) {
+            .hero { padding: 7rem 1.5rem 3rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col, .why-status, .connect-grid { grid-template-columns: 1fr; }
+            .nav-links {
+                display: none; position: absolute; top: 56px; left: 0; right: 0;
+                background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+                flex-direction: column; padding: 1rem; border-bottom: 1px solid var(--border);
+            }
+            .nav-links.open { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .footer-inner { flex-direction: column; gap: 0.75rem; }
+            .stats-bar, .section, .connect-section, .sources, .divider { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .stats-bar { margin-bottom: 3rem; }
+        }
+        @media (max-width: 480px) {
+            .stat { padding: 1.25rem 1rem; }
+            .stat-value { font-size: 1.4rem; }
+        }
+
+        .fade-section { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+        .fade-section.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="nav-links">
+                <a href="#model">Model</a>
+                <a href="#connect">Connect</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Portfolio capital for university research.</h1>
+        <p class="hero-sub">uIPO aggregates high-potential translational research from universities into structured investment vehicles, bringing portfolio discipline to early-stage scientific assets.</p>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-value">$117.7B</div>
+                <div class="stat-label">Annual university R&D spending (FY2024)</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">26,000+</div>
+                <div class="stat-label">Invention disclosures filed per year</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">~8,000</div>
+                <div class="stat-label">U.S. patents issued per year</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">~19%</div>
+                <div class="stat-label">NIH research grant success rate</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section fade-section">
+        <div class="section-label">The Problem</div>
+        <p>Federal research funding is under intense pressure. In FY2025, new competing NIH grants fell 39.6%, even as total funding declined less than 1%. Three-quarters of NIH's annual budget is already committed to existing grants before the fiscal year begins. New research stalls. The translational stage, between discovery and commercialization, has no portfolio framework to evaluate or fund it.</p>
+        <div class="thesis-line">The science has evolved. The funding infrastructure has not.</div>
+    </section>
+
+    <section id="model" class="section fade-section">
+        <div class="section-label">uIPO Model</div>
+        <h2>Structured access to university innovation</h2>
+        <p>Private markets have built portfolio structures for venture capital, private credit, infrastructure, and secondaries. Early-stage university IP remains fragmented and binary. uIPO aggregates university assets into investment vehicles:</p>
+        <div class="model-steps">
+            <div class="model-step">
+                <div class="step-num">1</div>
+                <div class="step-text"><strong>Source</strong> high-potential translational research directly from universities.</div>
+            </div>
+            <div class="model-step">
+                <div class="step-num">2</div>
+                <div class="step-text"><strong>Negotiate</strong> defined economic rights (equity, royalties, milestones).</div>
+            </div>
+            <div class="model-step">
+                <div class="step-num">3</div>
+                <div class="step-text"><strong>Evaluate</strong> using standardized diligence (TRL, IP defensibility, regulatory pathway, market size, capital intensity).</div>
+            </div>
+            <div class="model-step">
+                <div class="step-num">4</div>
+                <div class="step-text"><strong>Package</strong> into diversified innovation funds (healthcare, biotech, robotics, etc.) or broad university-wide portfolios.</div>
+            </div>
+            <div class="model-step">
+                <div class="step-num">5</div>
+                <div class="step-text"><strong>Fund</strong> through stage-gated capital, released as research hits defined technical milestones.</div>
+            </div>
+        </div>
+        <div class="portfolio-line">Instead of betting on a single lab outcome, investors gain exposure to a portfolio of scientific assets.</div>
+    </section>
+
+    <section class="section fade-section">
+        <div class="two-col">
+            <div class="card">
+                <h3>Phase I: Pilot Portfolio</h3>
+                <p>Proof of concept focused on CU Boulder, where researchers submitted $2.2 billion in grant proposals in FY2025 and $766.7 million was awarded. Building a scoring and valuation framework across TRL stages. Backtesting against historical commercialization data. Constructing a single pilot portfolio to validate the model.</p>
+            </div>
+            <div class="card">
+                <h3>Long-Term Vision</h3>
+                <p>A liquid innovation marketplace where each university offers a top-level fund, broad exposure to the institution's full research output, with sector-specific funds beneath it for targeted allocation. Investors choose breadth or precision. The platform scales by adding universities, each with its own independent fund structure.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-section">
+        <div class="why-status">
+            <div class="why-now-card">
+                <h3>Why Now</h3>
+                <p>The FY2026 budget proposes a 40.6% cut to NIH discretionary funding. Universities are already freezing hiring and delaying projects. Private capital has no structured access to university IP. The window to build this infrastructure is now.</p>
+            </div>
+            <div class="status-card">
+                <h3>Current Status &amp; Asks</h3>
+                <ul class="status-list">
+                    <li>Competing in the University of Colorado New Venture Challenge, first deadline 3/30/2026</li>
+                    <li>In conversation with Tech Transfer Offices and university stakeholders</li>
+                    <li>Seeking guidance on portfolio construction and valuation methodology</li>
+                    <li>Seeking mentors across capital markets, tech transfer, and structured finance</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"><div class="divider-line"></div></div>
+
+    <section id="connect" class="connect-section fade-section">
+        <div class="section-label">Connect</div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--black);margin-bottom:0.5rem;">Get involved</h2>
+        <p style="color:var(--mid);font-size:0.9rem;font-weight:300;">Whether you're a researcher, investor, or potential mentor, we'd like to hear from you.</p>
+        <div class="connect-grid">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfne7Nfwb9hLHIp78_L08-B0GZtMderk8AxPECI01NXm2hm-A/viewform?usp=sharing" target="_blank" rel="noopener" class="connect-card">
+                <div class="connect-icon icon-research">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="connect-info">
+                    <h4>Researcher Interest Form</h4>
+                    <p>For university researchers exploring partnership</p>
+                </div>
+                <svg class="connect-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeZRbmTA7JF2SVIQUE2Q09aa4WmZ5D4Kupr7NdAc8xeLUdQDA/viewform?usp=sharing" target="_blank" rel="noopener" class="connect-card">
+                <div class="connect-icon icon-investor">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="connect-info">
+                    <h4>Investor Interest Form</h4>
+                    <p>For investors interested in innovation portfolios</p>
+                </div>
+                <svg class="connect-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://substack.com/@ethanreich" target="_blank" rel="noopener" class="connect-card">
+                <div class="connect-icon icon-substack">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16M4 8h16M4 12l8 6 8-6"/></svg>
+                </div>
+                <div class="connect-info">
+                    <h4>Substack</h4>
+                    <p>Follow for updates on uIPO and university innovation</p>
+                </div>
+                <svg class="connect-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="mailto:ethandreich@gmail.com" class="connect-card">
+                <div class="connect-icon icon-email">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="connect-info">
+                    <h4>Contact Us</h4>
+                    <p>ethandreich@gmail.com</p>
+                </div>
+                <svg class="connect-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <div class="sources">
+        <p>Sources: NSF HERD FY2024 · AUTM Licensing Survey FY2024 · NIH Data Book FY2024 · CRS R43341 · CU Boulder Contracts &amp; Grants FY2025</p>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="footer-text">Built at the intersection of finance and molecular biology</span>
+            <span class="footer-contact">Ethan Reich · <a href="tel:7207055959">(720) 705-5959</a> · <a href="mailto:Ethan.Reich-1@colorado.edu">Ethan.Reich-1@colorado.edu</a> · <a href="https://linkedin.com/in/ethandreich" target="_blank" rel="noopener">LinkedIn</a></span>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-section').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
